@@ -101,7 +101,3 @@ today with the Photos to Video Transition Generator!
 ## License
 
 This project is licensed under the MIT License.
-
-```
-
-```
