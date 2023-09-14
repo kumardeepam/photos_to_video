@@ -21,6 +21,11 @@ class PhotoURL(BaseModel):
     edited_photo_url: str
 
 
+@app.get("/")
+def read_root():
+    return {"message": "Photos to Instagram Reel generator!"}
+
+
 @app.post("/create_transition_video")
 async def create_transition_video(photos: PhotoURL):
     temp_dir = tempfile.mkdtemp()
