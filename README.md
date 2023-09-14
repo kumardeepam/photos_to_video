@@ -23,35 +23,43 @@ Follow these steps to clone and run the code locally and use the API:
 
 ### Clone the Repository
 
-````bash
+```bash
 git clone https://github.com/kumardeepam/photos_to_video.git
 
-
-
-
+```
 
 ### Run the FastAPI Application
 
 1.  Navigate to the cloned repository directory:
+
     ```bash
     cd photos_to_video
+    ```
 
 2.  Install the required Python dependencies:
+
+    ```bash
     pip install -r requirements.txt
+    ```
 
 3.  Start the FastAPI application:
+    ```bash
     uvicorn main:app --host 0.0.0.0 --port 8000 --reload
-
+    ```
 
 The application should now be running locally at
-    <http://localhost:8000>.
+
+```bash
+<http://localhost:8000>.
+```
 
 ### Access the Swagger API Documentation
 
 1.  Open your web browser.
 2.  Access the Swagger API documentation by navigating to:
+    ```bash
     http://localhost:8000/docs
-
+    ```
 
 This will open Swagger UI, which provides interactive documentation for
 the API.
@@ -76,20 +84,24 @@ marketers looking to create eye-catching and engaging content for short
 video platforms. Here are some ways it can benefit you:
 
 **Save Time**: Instead of manually creating transition videos
-  between photos, you can automate the process with this tool, saving
-  you time and effort.
+between photos, you can automate the process with this tool, saving
+you time and effort.
 **Engagement**: Engaging transitions between photos can help capture
-  the viewer\'s attention and make your content more shareable.
+the viewer\'s attention and make your content more shareable.
 **Platform Compatibility**: The generated videos are suitable for
-  various short video platforms, making it versatile for your content
-  strategy.
+various short video platforms, making it versatile for your content
+strategy.
 **Content Creation**: Whether you\'re a social media influencer,
-  content creator, or marketer, this tool can enhance your content
-  creation capabilities.
+content creator, or marketer, this tool can enhance your content
+creation capabilities.
 
 Start creating captivating short videos for your social media channels
 today with the Photos to Video Transition Generator!
 
 ## License
+
 This project is licensed under the MIT License.
-````
+
+```
+
+```
