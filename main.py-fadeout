@@ -1,0 +1,84 @@
+from fastapi import FastAPI
+from typing import List
+import cv2
+import numpy as np
+import tempfile
+import os
+import shutil
+from pydantic import BaseModel
+import requests
+from io import BytesIO
+from starlette.staticfiles import StaticFiles
+import uuid  # Import the uuid library
+
+app = FastAPI()
+
+# Mount the static directory where generated videos will be served
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+
+class PhotoURL(BaseModel):
+    raw_photo_url: str
+    edited_photo_url: str
+
+
+@app.post("/create_transition_video")
+async def create_transition_video(photos: PhotoURL):
+    # Create temporary directories to store downloaded photos and the output video
+    temp_dir = tempfile.mkdtemp()
+    raw_photo_path = os.path.join(temp_dir, "raw_photo.jpg")
+    edited_photo_path = os.path.join(temp_dir, "edited_photo.jpg")
+
+    try:
+        # Download the raw and edited photos from the provided URLs
+        raw_photo_response = requests.get(photos.raw_photo_url)
+        edited_photo_response = requests.get(photos.edited_photo_url)
+
+        if raw_photo_response.status_code != 200 or edited_photo_response.status_code != 200:
+            return {"error": "Failed to download photos from the provided URLs."}
+
+        # Save the downloaded photos to temporary directory
+        with open(raw_photo_path, "wb") as raw_photo_file:
+            raw_photo_file.write(raw_photo_response.content)
+
+        with open(edited_photo_path, "wb") as edited_photo_file:
+            edited_photo_file.write(edited_photo_response.content)
+
+        # Read the images using OpenCV
+        raw_img = cv2.imread(raw_photo_path)
+        edited_img = cv2.imread(edited_photo_path)
+
+        # Check if images have the same dimensions
+        if raw_img.shape != edited_img.shape:
+            return {"error": "Both photos must have the same dimensions."}
+
+        # Create a video writer with a random filename
+        frame_height, frame_width, _ = raw_img.shape
+        video_filename = f"{uuid.uuid4().hex}.mp4"
+        output_video_path = os.path.join(temp_dir, video_filename)
+        fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+        out = cv2.VideoWriter(output_video_path, fourcc,
+                              30, (frame_width, frame_height))
+
+        # Generate frames for the video with a sliding transition
+        for alpha in np.linspace(0, 1, 150):
+            blended = cv2.addWeighted(raw_img, 1 - alpha, edited_img, alpha, 0)
+            out.write(blended)
+
+        # Release the video writer
+        out.release()
+
+        # Move the generated video to the static directory
+        generated_video_dir = os.path.join("static", "generated-videos")
+        os.makedirs(generated_video_dir, exist_ok=True)
+        generated_video_path = os.path.join(
+            generated_video_dir, video_filename)
+        shutil.move(output_video_path, generated_video_path)
+
+        # Return the URL link to the generated video
+        video_url = f"/static/generated-videos/{video_filename}"
+        return {"video_url": video_url}
+
+    finally:
+        # Clean up temporary directory
+        shutil.rmtree(temp_dir)
