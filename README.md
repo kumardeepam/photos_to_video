@@ -86,11 +86,14 @@ video platforms. Here are some ways it can benefit you:
 **Save Time**: Instead of manually creating transition videos
 between photos, you can automate the process with this tool, saving
 you time and effort.
+
 **Engagement**: Engaging transitions between photos can help capture
 the viewer\'s attention and make your content more shareable.
+
 **Platform Compatibility**: The generated videos are suitable for
 various short video platforms, making it versatile for your content
 strategy.
+
 **Content Creation**: Whether you\'re a social media influencer,
 content creator, or marketer, this tool can enhance your content
 creation capabilities.
