@@ -23,19 +23,17 @@ Follow these steps to clone and run the code locally and use the API:
 
 ### Clone the Repository
 
-```bash
+````bash
 git clone https://github.com/kumardeepam/photos_to_video.git
 
 
 
 
-### Clone the Repository
-
-    git clone https://github.com/kumardeepam/photos_to_video.git
 
 ### Run the FastAPI Application
 
 1.  Navigate to the cloned repository directory:
+    ```bash
     cd photos_to_video
 
 2.  Install the required Python dependencies:
@@ -94,4 +92,4 @@ today with the Photos to Video Transition Generator!
 
 ## License
 This project is licensed under the MIT License.
-```
+````
