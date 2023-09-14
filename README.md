@@ -36,23 +36,23 @@ git clone https://github.com/kumardeepam/photos_to_video.git
 ### Run the FastAPI Application
 
 1.  Navigate to the cloned repository directory:
-cd photos_to_video
+    cd photos_to_video
 
 2.  Install the required Python dependencies:
-pip install -r requirements.txt
+    pip install -r requirements.txt
 
 3.  Start the FastAPI application:
-uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
 
 The application should now be running locally at
-<http://localhost:8000>.
+    <http://localhost:8000>.
 
 ### Access the Swagger API Documentation
 
 1.  Open your web browser.
 2.  Access the Swagger API documentation by navigating to:
-http://localhost:8000/docs
+    http://localhost:8000/docs
 
 
 This will open Swagger UI, which provides interactive documentation for
