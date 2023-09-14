@@ -50,7 +50,7 @@ git clone https://github.com/kumardeepam/photos_to_video.git
 The application should now be running locally at
 
 ```bash
-<http://localhost:8000>.
+http://localhost:8000
 ```
 
 ### Access the Swagger API Documentation
