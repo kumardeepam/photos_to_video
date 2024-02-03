@@ -20,11 +20,31 @@ class PhotoURL(BaseModel):
     raw_photo_url: str
     edited_photo_url: str
 
+# Function to add watermark text to an image
+def add_watermark(image, text, position, font, font_scale, font_thickness):
+    # print(image, text, position, font, font_scale, font_thickness)
+    text_size = cv2.getTextSize(text, font, font_scale, font_thickness)[0]
+    # print(text_size)
+    text_x = position[0] - text_size[0]
+    text_y = position[1] + text_size[1]
+    # print(text_x, text_y)
+    cv2.putText(image, text, (text_x, text_y), font, font_scale, (255, 255, 255), font_thickness, cv2.LINE_AA)
+    return image
+
 
 @app.get("/")
 def read_root():
     return {"message": "Photos to Instagram Reel generator!"}
 
+# input url exaample
+# {
+#   "raw_photo_url": "https://gcdnb.pbrd.co/images/Cnkd6ZQvnNW7.jpg",
+#   "edited_photo_url": "https://gcdnb.pbrd.co/images/PivPTG9fqAxe.jpg"
+# }
+# {
+#   "raw_photo_url": "https://gcdnb.pbrd.co/images/4TkOnJ9MNZ8n.jpg",
+#   "edited_photo_url": "https://gcdnb.pbrd.co/images/kc1uB5he3039.jpg"
+# }
 
 @app.post("/create_transition_video")
 async def create_transition_video(photos: PhotoURL):
@@ -54,9 +74,24 @@ async def create_transition_video(photos: PhotoURL):
         frame_height, frame_width, _ = raw_img.shape
         video_filename = f"{uuid.uuid4().hex}.mp4"
         output_video_path = os.path.join(temp_dir, video_filename)
-        fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+        # fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+        fourcc = cv2.VideoWriter_fourcc(*"avc1")
+
+
+        
         out = cv2.VideoWriter(output_video_path, fourcc,
                               30, (frame_width, frame_height))
+        
+        # Define watermark properties
+        print(frame_width)
+        print(frame_height)
+        watermark_text = "created with instareel.app"
+        watermark_position = (frame_width - 1300, frame_height - 1100)  # Adjust x offset to match your frame size
+        # watermark_position = (10, frame_height - 650)  # Adjust x offset to match your frame size
+
+        watermark_font = cv2.FONT_HERSHEY_SIMPLEX
+        watermark_font_scale = 2
+        watermark_font_thickness = 3
 
         # Generate frames for the video with a left to right wipe out transition
         num_frames = 150
@@ -67,6 +102,11 @@ async def create_transition_video(photos: PhotoURL):
             # Create a frame with the wipe effect
             frame = raw_img.copy()
             frame[:, :wipe_line] = edited_img[:, :wipe_line]
+
+            # Add watermark to the frame
+            frame = add_watermark(frame, watermark_text, watermark_position,
+                              watermark_font, watermark_font_scale, watermark_font_thickness)
+
 
             out.write(frame)
 
